@@ -1,7 +1,3 @@
-// ╔══════════════════════════════════════════════════╗
-// ║              ★ EDIT THIS SECTION ★              ║
-// ╚══════════════════════════════════════════════════╝
-
 const CONFIG = {
   categories: [
     {
@@ -24,10 +20,18 @@ const CONFIG = {
     {
       label: "~/media",
       links: [
-        { name: "youtube",        url: "https://youtube.com" },
-        { name: "reddit",         url: "https://reddit.com" },
-        { name: "google news",    url: "https://news.google.com" },
-        { name: "twitch",         url: "https://twitch.tv" },
+        { name: "youtube",    url: "https://youtube.com" },
+        { name: "reddit",     url: "https://reddit.com" },
+        { name: "lastfm",     url: "https://last.fm" },
+        { name: "twitch",     url: "https://twitch.tv" },
+      ]
+    },
+    {
+      label: "~/news",
+      links: [
+        { name: "hacker news", url: "https://news.ycombinator.com" },
+        { name: "google news", url: "https://news.google.com" },
+        { name: "the verge",   url: "https://www.theverge.com" },
       ]
     },
     {
@@ -38,34 +42,34 @@ const CONFIG = {
         { name: "gemini",      url: "https://gemini.google.com" },
         { name: "perplexity",  url: "https://www.perplexity.ai" },
         { name: "deepseek",    url: "https://chat.deepseek.com" },
-        { name: "copilot",     url: "https://copilot.microsoft.com" }
       ]
     },
     {
       label: "~/social",
       links: [
-        { name: "twitter",        url: "https://x.com" },
-        { name: "instagram",      url: "https://instagram.com" },
-        { name: "tiktok",         url: "https://tiktok.com" },
-        { name: "pinterest",      url: "https://pinterest.com" },
+        { name: "twitter",    url: "https://x.com" },
+        { name: "instagram",  url: "https://instagram.com" },
+        { name: "tiktok",     url: "https://tiktok.com" },
+        { name: "pinterest",  url: "https://pinterest.com" },
       ]
     },
     {
       label: "~/tools",
       links: [
-        { name: "google drive",   url: "https://drive.google.com" },
-        { name: "calendar",       url: "https://calendar.google.com" },
-        { name: "maps",           url: "https://maps.google.com" },
-        { name: "keep",           url: "https://keep.google.com" }
+        { name: "google drive", url: "https://drive.google.com" },
+        { name: "calendar",     url: "https://calendar.google.com" },
+        { name: "maps",         url: "https://maps.google.com" },
+        { name: "keep",         url: "https://keep.google.com" }
       ]
     },
     {
       label: "~/games",
       links: [
-        { name: "ankergames",   url: "https://ankergames.net" },
-        { name: "steamrip",        url: "https://steamrip.com/.com" },
-        { name: "f95zone",        url: "https://f95zone.to" },
+        { name: "ankergames", url: "https://ankergames.net" },
+        { name: "steamrip",   url: "https://steamrip.com" },
+        { name: "f95zone",    url: "https://f95zone.to" },
         { name: "gog",        url: "https://gog-games.to/" },
+        { name: "fitgirl",    url: "https://fitgirl-repacks.site" },
       ]
     },
   ]
@@ -116,21 +120,20 @@ CONFIG.categories.forEach(cat => {
 
   grid.appendChild(group);
 });
-// ────────────────────────────────────────
-//  Dynamic greeting with auto‑detect (localStorage)
-// ────────────────────────────────────────
 
-// Get or ask for username
+// ────────────────────────────────────────
+//  Dynamic greeting with auto-detect (localStorage)
+// ────────────────────────────────────────
 function getUsername() {
   let stored = localStorage.getItem('startpage_username');
   if (stored) return stored;
-  
+
   let name = prompt("Welcome to your start page!\nEnter your name:", "alif");
   if (name && name.trim()) {
     localStorage.setItem('startpage_username', name.trim());
     return name.trim();
   }
-  return "guest"; // fallback
+  return "guest";
 }
 
 function updateGreeting() {
@@ -155,5 +158,4 @@ function updateGreeting() {
   }
 }
 
-// Run once when page loads
 updateGreeting();

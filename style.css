@@ -38,52 +38,38 @@ body {
   color: var(--fg-0);
   font-family: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  padding: 0 4rem;
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   LAYOUT
-━━━━━━━━━━━━━━━━━━━━━━━ */
 .layout {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 3rem;
-  max-width: 900px;
+  gap: 2rem;
   width: 100%;
-  padding: 2rem;               /* was 2.5rem 2rem – more uniform */
+  max-width: 960px;
   animation: fadeIn 0.4s ease both;
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   GIF PANEL
-━━━━━━━━━━━━━━━━━━━━━━━ */
 .sidebar {
   flex-shrink: 0;
-  width: 230px;
-  height: 230px;
+  width: 160px;
+  height: 280px;
   background-image: url('bg.gif');
   background-size: cover;
   background-position: center;
   background-color: var(--bg-1);
   filter: saturate(0.85) brightness(0.9);
-  box-shadow: 0 0 8px rgba(136, 192, 208, 0.2);
-  transition: box-shadow 0.2s;
-}
-
-.sidebar:hover {
   box-shadow: 0 0 14px rgba(136, 192, 208, 0.4);
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   CONTENT
-━━━━━━━━━━━━━━━━━━━━━━━ */
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;               /* was 0.5rem – more breathing */
+  gap: 0.75rem;
 }
 
 .welcome {
@@ -94,7 +80,7 @@ body {
   color: var(--fg-2);
   letter-spacing: -0.01em;
   line-height: 1;
-  margin-bottom: 0.25rem;     /* was 0.1rem */
+  margin-bottom: 0.25rem;
 }
 
 .datetime {
@@ -106,13 +92,12 @@ body {
 .prompt {
   font-size: 0.8rem;
   color: var(--frost-2);
-  margin: 0.25rem 0 1rem;     /* was 0.6rem 0 1.1rem – tighter top */
+  margin: 0.25rem 0 1rem;
   letter-spacing: 0.02em;
 }
 
-/* blinking cursor after prompt */
 .prompt::after {
-  content: "█";
+  content: "▌";
   animation: blink 1s step-end infinite;
   margin-left: 4px;
   color: var(--frost-2);
@@ -123,32 +108,29 @@ body {
   50% { opacity: 0; }
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   LINKS
-━━━━━━━━━━━━━━━━━━━━━━━ */
 .links-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  columns: 4;
   column-gap: 2.5rem;
-  row-gap: 1.2rem;
 }
 
 .link-group {
+  break-inside: avoid;
+  margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;               /* was 0.25rem – more air between links */
+  gap: 0.4rem;
 }
 
 .group-label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--frost-1);
   letter-spacing: 0.06em;
-  margin-bottom: 0.4rem;     /* was 0.3rem – clearer separation */
+  margin-bottom: 0.4rem;
 }
 
 .link-item {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.8  5rem;
   color: var(--fg-0);
   text-decoration: none;
   letter-spacing: 0.02em;
@@ -165,34 +147,38 @@ body {
   color: var(--fg-2);
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   ANIMATION
-━━━━━━━━━━━━━━━━━━━━━━━ */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━
-   RESPONSIVE IMPROVEMENTS
-━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* Medium screens: reduce max-width and gaps */
 @media (max-width: 800px) {
+  body {
+    padding: 0 1.5rem;
+  }
   .layout {
-    max-width: 95%;
-    gap: 2rem;
+    gap: 1.2rem;
+  }
+  .links-grid {
+    column-gap: 1.8rem;
   }
 }
 
-/* Stack layout vertically (sidebar on top) */
 @media (max-width: 600px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
   .layout {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 1.5rem;
-    padding: 1.25rem;        /* was 1.5rem – slightly tighter */
+    padding: 0;
   }
   .sidebar {
     width: 140px;
@@ -206,18 +192,17 @@ body {
     justify-items: start;
   }
   .prompt {
-    align-self: flex-start;  /* keeps prompt aligned with links */
+    align-self: flex-start;
   }
 }
 
-/* Single‑column link grid for narrow screens */
 @media (max-width: 550px) {
   .links-grid {
     grid-template-columns: 1fr;
-    row-gap: 1.5rem;        /* was 1.2rem – more breathing when stacked */
+    row-gap: 1.5rem;
   }
   .link-group {
-    gap: 0.5rem;            /* larger touch target spacing */
+    gap: 0.5rem;
   }
   .welcome {
     font-size: 1.6rem;
@@ -231,11 +216,9 @@ body {
   }
 }
 
-/* Extra small screens: tighter spacing */
 @media (max-width: 400px) {
-  .layout {
-    padding: 0.75rem;       /* was 0.8rem – cleaner number */
-    gap: 1rem;
+  body {
+    padding: 0.75rem;
   }
   .sidebar {
     width: 100px;
@@ -246,5 +229,8 @@ body {
   }
   .prompt {
     font-size: 0.7rem;
+  }
+  .links-grid {
+    row-gap: 1.2rem;
   }
 }
