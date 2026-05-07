@@ -14,7 +14,7 @@ personal project. click links, go to links.
 
 ## browser support
 
-**Chromium-based browsers** — manifest v3, works out of the box.
+Chromium-based browsers.
 
 ## icon credit
 
