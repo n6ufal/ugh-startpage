@@ -5,7 +5,8 @@ a highly opinionated, utilitarian new tab replacement.
 ## demo
 
 
-https://github.com/user-attachments/assets/80e328a5-d2e8-428c-8147-bfdbe5ecc8de
+<img width="800" height="450" alt="demo" src="https://github.com/user-attachments/assets/5a861c7d-be66-4315-9242-37a317e0521a" />
+
 
 
 ## why
