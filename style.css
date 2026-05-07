@@ -1,0 +1,250 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   NORD PALETTE
+━━━━━━━━━━━━━━━━━━━━━━━ */
+:root {
+  --bg:       #2E3440;
+  --bg-1:     #3B4252;
+  --bg-2:     #434C5E;
+  --dim:      #4C566A;
+  --fg-muted: #616E88;
+  --fg-0:     #D8DEE9;
+  --fg-1:     #E5E9F0;
+  --fg-2:     #ECEFF4;
+  --frost-0:  #8FBCBB;
+  --frost-1:  #88C0D0;
+  --frost-2:  #81A1C1;
+  --frost-3:  #5E81AC;
+  --green:    #A3BE8C;
+  --purple:   #B48EAD;
+  --yellow:   #EBCB8B;
+  --orange:   #D08770;
+  --red:      #BF616A;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg-0);
+  font-family: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   LAYOUT
+━━━━━━━━━━━━━━━━━━━━━━━ */
+.layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+  max-width: 900px;
+  width: 100%;
+  padding: 2rem;               /* was 2.5rem 2rem – more uniform */
+  animation: fadeIn 0.4s ease both;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   GIF PANEL
+━━━━━━━━━━━━━━━━━━━━━━━ */
+.sidebar {
+  flex-shrink: 0;
+  width: 230px;
+  height: 230px;
+  background-image: url('bg.gif');
+  background-size: cover;
+  background-position: center;
+  background-color: var(--bg-1);
+  filter: saturate(0.85) brightness(0.9);
+  box-shadow: 0 0 8px rgba(136, 192, 208, 0.2);
+  transition: box-shadow 0.2s;
+}
+
+.sidebar:hover {
+  box-shadow: 0 0 14px rgba(136, 192, 208, 0.4);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━ */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;               /* was 0.5rem – more breathing */
+}
+
+.welcome {
+  font-family: 'Lora', 'Georgia', 'Palatino Linotype', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--fg-2);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin-bottom: 0.25rem;     /* was 0.1rem */
+}
+
+.datetime {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  letter-spacing: 0.04em;
+}
+
+.prompt {
+  font-size: 0.8rem;
+  color: var(--frost-2);
+  margin: 0.25rem 0 1rem;     /* was 0.6rem 0 1.1rem – tighter top */
+  letter-spacing: 0.02em;
+}
+
+/* blinking cursor after prompt */
+.prompt::after {
+  content: "█";
+  animation: blink 1s step-end infinite;
+  margin-left: 4px;
+  color: var(--frost-2);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   LINKS
+━━━━━━━━━━━━━━━━━━━━━━━ */
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 2.5rem;
+  row-gap: 1.2rem;
+}
+
+.link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;               /* was 0.25rem – more air between links */
+}
+
+.group-label {
+  font-size: 0.7rem;
+  color: var(--frost-1);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;     /* was 0.3rem – clearer separation */
+}
+
+.link-item {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--fg-0);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  transition: color 0.12s;
+  width: fit-content;
+}
+
+.link-item:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--frost-2);
+  color: var(--fg-2);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   ANIMATION
+━━━━━━━━━━━━━━━━━━━━━━━ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━
+   RESPONSIVE IMPROVEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Medium screens: reduce max-width and gaps */
+@media (max-width: 800px) {
+  .layout {
+    max-width: 95%;
+    gap: 2rem;
+  }
+}
+
+/* Stack layout vertically (sidebar on top) */
+@media (max-width: 600px) {
+  .layout {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.25rem;        /* was 1.5rem – slightly tighter */
+  }
+  .sidebar {
+    width: 140px;
+    height: 140px;
+  }
+  .content {
+    width: 100%;
+    align-items: center;
+  }
+  .links-grid {
+    justify-items: start;
+  }
+  .prompt {
+    align-self: flex-start;  /* keeps prompt aligned with links */
+  }
+}
+
+/* Single‑column link grid for narrow screens */
+@media (max-width: 550px) {
+  .links-grid {
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;        /* was 1.2rem – more breathing when stacked */
+  }
+  .link-group {
+    gap: 0.5rem;            /* larger touch target spacing */
+  }
+  .welcome {
+    font-size: 1.6rem;
+  }
+  .group-label {
+    font-size: 0.7rem;
+  }
+  .link-item {
+    font-size: 0.75rem;
+    line-height: 1.9;
+  }
+}
+
+/* Extra small screens: tighter spacing */
+@media (max-width: 400px) {
+  .layout {
+    padding: 0.75rem;       /* was 0.8rem – cleaner number */
+    gap: 1rem;
+  }
+  .sidebar {
+    width: 100px;
+    height: 100px;
+  }
+  .datetime {
+    font-size: 0.65rem;
+  }
+  .prompt {
+    font-size: 0.7rem;
+  }
+}
