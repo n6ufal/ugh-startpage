@@ -23,7 +23,7 @@ const CONFIG = {
         { name: "youtube",    url: "https://youtube.com" },
         { name: "reddit",     url: "https://reddit.com" },
         { name: "lastfm",     url: "https://last.fm" },
-        { name: "twitch",     url: "https://twitch.tv" },
+        { name: "fmhy",       url: "https://fmhy.pages.dev/" },
       ]
     },
     {
