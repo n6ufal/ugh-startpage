@@ -75,6 +75,8 @@ const CONFIG = {
   ]
 };
 
+const LS_USERNAME_KEY = 'startpage_username';
+
 // ────────────────────────────────────────
 //  Clock — updates every second
 // ────────────────────────────────────────
@@ -89,17 +91,40 @@ function updateDatetime() {
   const dd  = String(now.getDate()).padStart(2, '0');
   const mo  = String(now.getMonth() + 1).padStart(2, '0');
   const yy  = String(now.getFullYear()).slice(2);
-  document.getElementById('datetime').textContent =
-    `${day}, ${hh}:${mm}:${ss} | ${dd}/${mo}/${yy}`;
+  const el = document.getElementById('datetime');
+  if (el) {
+    el.textContent =
+      `${day}, ${hh}:${mm}:${ss} | ${dd}/${mo}/${yy}`;
+  }
+  document.title = `${hh}:${mm} | ${dd}/${mo}/${yy}`;
 }
 
-updateDatetime();
-setInterval(updateDatetime, 1000);
+let clockInterval;
+
+function startClock() {
+  updateDatetime();
+  clockInterval = setInterval(updateDatetime, 1000);
+}
+
+function stopClock() {
+  clearInterval(clockInterval);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopClock();
+  } else {
+    startClock();
+  }
+});
+
+startClock();
 
 // ────────────────────────────────────────
 //  Render link groups
 // ────────────────────────────────────────
 const grid = document.getElementById('links-grid');
+if (!grid) throw new Error('Missing links-grid element');
 
 CONFIG.categories.forEach(cat => {
   const group = document.createElement('div');
@@ -114,6 +139,8 @@ CONFIG.categories.forEach(cat => {
     const a = document.createElement('a');
     a.className = 'link-item';
     a.href = link.url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
     a.textContent = link.name;
     group.appendChild(a);
   });
@@ -124,28 +151,57 @@ CONFIG.categories.forEach(cat => {
 // ────────────────────────────────────────
 //  Dynamic greeting with auto-detect (localStorage)
 // ────────────────────────────────────────
-function getUsername() {
-  let stored = localStorage.getItem('startpage_username');
-  if (stored) return stored;
-
-  let name = prompt("Welcome to your start page!\nEnter your name:", "alif");
+function setUsername(name) {
   if (name && name.trim()) {
-    localStorage.setItem('startpage_username', name.trim());
-    return name.trim();
+    localStorage.setItem(LS_USERNAME_KEY, name.trim());
   }
-  return "guest";
 }
+
+function getUsername() {
+  return localStorage.getItem(LS_USERNAME_KEY) || "guest";
+}
+
+function promptForUsername() {
+  if (localStorage.getItem(LS_USERNAME_KEY)) return;
+
+  const dialog = document.createElement('dialog');
+  dialog.innerHTML = `
+    <form method="dialog">
+      <p>Welcome to your start page!</p>
+      <label>
+        Enter your name:
+        <input type="text" id="name-input" value="alif" autofocus>
+      </label>
+      <button type="submit">Save</button>
+    </form>
+  `;
+  document.body.appendChild(dialog);
+  dialog.addEventListener('close', () => {
+    const input = document.getElementById('name-input');
+    if (input && input.value) {
+      setUsername(input.value);
+      updateGreeting();
+    }
+    dialog.remove();
+  });
+  dialog.showModal();
+}
+
+const MORNING_START = 5;
+const AFTERNOON_START = 12;
+const EVENING_START = 17;
+const NIGHT_START = 21;
 
 function updateGreeting() {
   const now = new Date();
   const hour = now.getHours();
   let greeting;
 
-  if (hour >= 5 && hour < 12) {
+  if (hour >= MORNING_START && hour < AFTERNOON_START) {
     greeting = "good morning";
-  } else if (hour >= 12 && hour < 17) {
+  } else if (hour >= AFTERNOON_START && hour < EVENING_START) {
     greeting = "good afternoon";
-  } else if (hour >= 17 && hour < 21) {
+  } else if (hour >= EVENING_START && hour < NIGHT_START) {
     greeting = "good evening";
   } else {
     greeting = "good night";
@@ -159,3 +215,4 @@ function updateGreeting() {
 }
 
 updateGreeting();
+promptForUsername();
