@@ -264,8 +264,13 @@ body {
 }
 
 .editing .sidebar {
-  opacity: 0.1;
+  opacity: 0;
   transition: opacity 0.2s;
+}
+
+.editing .content {
+  position: relative;
+  z-index: 1;
 }
 
 .link-row {
@@ -287,11 +292,12 @@ body {
 }
 
 .editing .link-remove {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .link-remove:hover {
   opacity: 1 !important;
+  color: var(--fg-2);
 }
 
 .add-link-area {
@@ -322,12 +328,12 @@ body {
 }
 
 .add-link-area input::placeholder {
-  color: var(--dim);
+  color: var(--fg-muted);
 }
 
 .add-btn {
   background: var(--frost-3);
-  color: var(--fg-2);
+  color: var(--fg-0);
   border: none;
   width: 1.3rem;
   height: 1.3rem;
