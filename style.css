@@ -44,17 +44,21 @@ body {
 }
 
 .layout {
+  position: relative;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
-  gap: 2rem;
   width: 100%;
   max-width: 960px;
   animation: fadeIn 0.4s ease both;
 }
 
 .sidebar {
-  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 160px;
   height: 280px;
   background-image: url('bg.gif');
@@ -66,7 +70,6 @@ body {
 }
 
 .content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -215,6 +218,8 @@ body {
     padding: 0;
   }
   .sidebar {
+    position: static;
+    transform: none;
     width: 140px;
     height: 140px;
   }
