@@ -126,30 +126,153 @@ document.addEventListener('visibilitychange', () => {
 startClock();
 
 // ────────────────────────────────────────
-//  Render link groups
+//  Link editor — edit mode with add/remove
 // ────────────────────────────────────────
-const grid = document.getElementById('links-grid');
-if (!grid) throw new Error('Missing links-grid element');
+const LS_KEY = 'startpage_links';
 
-CONFIG.categories.forEach(cat => {
-  const group = document.createElement('div');
-  group.className = 'link-group';
+let categories;
 
-  const label = document.createElement('div');
-  label.className = 'group-label';
-  label.textContent = cat.label;
-  group.appendChild(label);
+function loadCategories() {
+  const stored = localStorage.getItem(LS_KEY);
+  if (stored) {
+    try {
+      categories = JSON.parse(stored);
+      return;
+    } catch (_) {}
+  }
+  categories = JSON.parse(JSON.stringify(CONFIG.categories));
+}
 
-  cat.links.forEach(link => {
-    const a = document.createElement('a');
-    a.className = 'link-item';
-    a.href = link.url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.textContent = link.name;
-    group.appendChild(a);
+function saveCategories() {
+  localStorage.setItem(LS_KEY, JSON.stringify(categories));
+}
+
+function renderLinks() {
+  const grid = document.getElementById('links-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  categories.forEach(cat => {
+    const group = document.createElement('div');
+    group.className = 'link-group';
+
+    const label = document.createElement('div');
+    label.className = 'group-label';
+    label.textContent = cat.label;
+    group.appendChild(label);
+
+    cat.links.forEach((link, idx) => {
+      const row = document.createElement('div');
+      row.className = 'link-row';
+
+      const a = document.createElement('a');
+      a.className = 'link-item';
+      a.href = link.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = link.name;
+      row.appendChild(a);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'link-remove';
+      removeBtn.textContent = '✕';
+      removeBtn.title = 'Remove link';
+      removeBtn.addEventListener('click', () => removeLink(cat.label, idx));
+      row.appendChild(removeBtn);
+
+      group.appendChild(row);
+    });
+
+    const addArea = document.createElement('div');
+    addArea.className = 'add-link-area';
+    const addName = document.createElement('input');
+    addName.type = 'text';
+    addName.placeholder = 'name';
+    addName.className = 'add-name';
+    const addUrl = document.createElement('input');
+    addUrl.type = 'text';
+    addUrl.placeholder = 'url';
+    addUrl.className = 'add-url';
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-btn';
+    addBtn.textContent = '+';
+    addBtn.addEventListener('click', () => doAddLink(cat.label, addName, addUrl));
+    [addName, addUrl].forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') doAddLink(cat.label, addName, addUrl);
+      });
+    });
+    addArea.appendChild(addName);
+    addArea.appendChild(addUrl);
+    addArea.appendChild(addBtn);
+    group.appendChild(addArea);
+
+    grid.appendChild(group);
   });
 
-  grid.appendChild(group);
+  const editFooter = document.createElement('div');
+  editFooter.className = 'edit-footer';
+  const resetBtn = document.createElement('button');
+  resetBtn.id = 'reset-links';
+  resetBtn.textContent = 'Reset to defaults';
+  resetBtn.addEventListener('click', resetLinks);
+  editFooter.appendChild(resetBtn);
+  grid.appendChild(editFooter);
+}
+
+function doAddLink(catLabel, nameInput, urlInput) {
+  const name = nameInput.value.trim();
+  const url = urlInput.value.trim();
+  if (!name || !url) return;
+  addLink(catLabel, name, url);
+  nameInput.value = '';
+  urlInput.value = '';
+  nameInput.focus();
+}
+
+function addLink(catLabel, name, url) {
+  const cat = categories.find(c => c.label === catLabel);
+  if (!cat) return;
+  cat.links.push({ name, url });
+  saveCategories();
+  renderLinks();
+}
+
+function removeLink(catLabel, idx) {
+  const cat = categories.find(c => c.label === catLabel);
+  if (!cat) return;
+  cat.links.splice(idx, 1);
+  saveCategories();
+  renderLinks();
+}
+
+function resetLinks() {
+  if (!confirm('Reset all links to defaults?')) return;
+  localStorage.removeItem(LS_KEY);
+  categories = JSON.parse(JSON.stringify(CONFIG.categories));
+  renderLinks();
+}
+
+loadCategories();
+renderLinks();
+
+// ────────────────────────────────────────
+//  Edit mode toggle
+// ────────────────────────────────────────
+const editToggle = document.getElementById('edit-toggle');
+let isEditing = false;
+
+editToggle.addEventListener('click', () => {
+  isEditing = !isEditing;
+  document.body.classList.toggle('editing', isEditing);
+  editToggle.innerHTML = isEditing ? '&#x2715;' : '&#x2699;';
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && isEditing) {
+    isEditing = false;
+    document.body.classList.remove('editing');
+    editToggle.innerHTML = '&#x2699;';
+  }
 });
 

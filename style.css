@@ -239,3 +239,131 @@ body {
   }
 }
 
+#edit-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: color 0.12s, transform 0.3s;
+  padding: 0.2rem;
+  line-height: 1;
+}
+
+#edit-toggle:hover {
+  color: var(--fg-1);
+}
+
+.editing #edit-toggle {
+  transform: rotate(60deg);
+  color: var(--frost-2);
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.link-remove {
+  background: none;
+  border: none;
+  color: var(--red);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.editing .link-remove {
+  opacity: 0.6;
+}
+
+.link-remove:hover {
+  opacity: 1 !important;
+}
+
+.add-link-area {
+  display: none;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  align-items: center;
+}
+
+.editing .add-link-area {
+  display: flex;
+}
+
+.add-link-area input {
+  background: var(--bg-2);
+  color: var(--fg-0);
+  border: 1px solid var(--dim);
+  padding: 0.2rem 0.4rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  outline: none;
+  width: 5rem;
+}
+
+.add-link-area input:focus {
+  border-color: var(--frost-2);
+}
+
+.add-link-area input::placeholder {
+  color: var(--dim);
+}
+
+.add-btn {
+  background: var(--frost-3);
+  color: var(--fg-2);
+  border: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  font-size: 0.85rem;
+  line-height: 1;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.add-btn:hover {
+  background: var(--frost-2);
+}
+
+.edit-footer {
+  display: none;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.editing .edit-footer {
+  display: flex;
+}
+
+#reset-links {
+  background: none;
+  border: 1px solid var(--dim);
+  color: var(--fg-muted);
+  padding: 0.3rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+#reset-links:hover {
+  color: var(--red);
+  border-color: var(--red);
+}
+
