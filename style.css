@@ -150,8 +150,16 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .layout {
+  .layout,
+  .link-item,
+  .link-item::before,
+  #edit-toggle,
+  .link-remove,
+  .editing .sidebar,
+  .add-btn,
+  #reset-links {
     animation: none;
+    transition: none;
   }
 }
 
@@ -208,8 +216,7 @@ body {
     font-size: clamp(2.5rem, 8vw, 3.5rem);
   }
   .links-grid {
-    grid-template-columns: 1fr;
-    row-gap: 1.5rem;
+    columns: 2;
   }
   .link-group {
     gap: 0.5rem;
@@ -295,8 +302,8 @@ body {
   opacity: 0.8;
 }
 
-.link-remove:hover {
-  opacity: 1 !important;
+.editing .link-remove:hover {
+  opacity: 1;
   color: var(--fg-2);
 }
 

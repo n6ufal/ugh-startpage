@@ -101,7 +101,6 @@ function updateDatetime() {
     dateEl.textContent = `${day}, ${dd} ${mo} ${yy}`;
   }
 
-  document.title = `${hh}:${mm} | ${dd} ${mo} ${yy}`;
 }
 
 let clockInterval;
@@ -132,19 +131,55 @@ const LS_KEY = 'startpage_links';
 
 let categories;
 
+function cloneDefaults() {
+  return structuredClone(CONFIG.categories);
+}
+
 function loadCategories() {
   const stored = localStorage.getItem(LS_KEY);
   if (stored) {
     try {
       categories = JSON.parse(stored);
       return;
-    } catch (_) {}
+    } catch (_) {
+      console.warn('Failed to parse stored links, using defaults', _);
+    }
   }
-  categories = JSON.parse(JSON.stringify(CONFIG.categories));
+  categories = cloneDefaults();
 }
 
 function saveCategories() {
-  localStorage.setItem(LS_KEY, JSON.stringify(categories));
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(categories));
+  } catch (_) {
+    console.warn('Failed to save links to localStorage', _);
+  }
+}
+
+function createLinkRow(cat, link, idx) {
+  const row = document.createElement('div');
+  row.className = 'link-row';
+
+  const a = document.createElement('a');
+  a.className = 'link-item';
+  a.href = link.url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = link.name;
+  row.appendChild(a);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'link-remove';
+  removeBtn.textContent = '✕';
+  removeBtn.title = 'Remove link';
+  removeBtn.addEventListener('click', () => {
+    const groupEl = removeBtn.closest('.link-group');
+    const rowIdx = Array.from(groupEl.querySelectorAll('.link-row')).indexOf(row);
+    removeLink(cat, rowIdx);
+  });
+  row.appendChild(removeBtn);
+
+  return row;
 }
 
 function renderLinks() {
@@ -155,6 +190,7 @@ function renderLinks() {
   categories.forEach(cat => {
     const group = document.createElement('div');
     group.className = 'link-group';
+    group.dataset.label = cat.label;
 
     const label = document.createElement('div');
     label.className = 'group-label';
@@ -162,25 +198,7 @@ function renderLinks() {
     group.appendChild(label);
 
     cat.links.forEach((link, idx) => {
-      const row = document.createElement('div');
-      row.className = 'link-row';
-
-      const a = document.createElement('a');
-      a.className = 'link-item';
-      a.href = link.url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.textContent = link.name;
-      row.appendChild(a);
-
-      const removeBtn = document.createElement('button');
-      removeBtn.className = 'link-remove';
-      removeBtn.textContent = '✕';
-      removeBtn.title = 'Remove link';
-      removeBtn.addEventListener('click', () => removeLink(cat.label, idx));
-      row.appendChild(removeBtn);
-
-      group.appendChild(row);
+      group.appendChild(createLinkRow(cat, link, idx));
     });
 
     const addArea = document.createElement('div');
@@ -196,10 +214,10 @@ function renderLinks() {
     const addBtn = document.createElement('button');
     addBtn.className = 'add-btn';
     addBtn.textContent = '+';
-    addBtn.addEventListener('click', () => doAddLink(cat.label, addName, addUrl));
+    addBtn.addEventListener('click', () => doAddLink(cat, addName, addUrl));
     [addName, addUrl].forEach(inp => {
       inp.addEventListener('keydown', e => {
-        if (e.key === 'Enter') doAddLink(cat.label, addName, addUrl);
+        if (e.key === 'Enter') doAddLink(cat, addName, addUrl);
       });
     });
     addArea.appendChild(addName);
@@ -220,36 +238,62 @@ function renderLinks() {
   grid.appendChild(editFooter);
 }
 
-function doAddLink(catLabel, nameInput, urlInput) {
+function doAddLink(cat, nameInput, urlInput) {
   const name = nameInput.value.trim();
   const url = urlInput.value.trim();
   if (!name || !url) return;
-  addLink(catLabel, name, url);
+
+  let finalUrl = url;
+  try {
+    new URL(finalUrl);
+  } catch {
+    finalUrl = 'https://' + url;
+    try {
+      new URL(finalUrl);
+    } catch {
+      return;
+    }
+  }
+
+  if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+    return;
+  }
+
+  addLink(cat, name, finalUrl);
   nameInput.value = '';
   urlInput.value = '';
   nameInput.focus();
 }
 
-function addLink(catLabel, name, url) {
-  const cat = categories.find(c => c.label === catLabel);
+function addLink(cat, name, url) {
   if (!cat) return;
   cat.links.push({ name, url });
   saveCategories();
-  renderLinks();
+
+  const group = document.querySelector(`.link-group[data-label="${cat.label}"]`);
+  if (group) {
+    const addArea = group.querySelector('.add-link-area');
+    const row = createLinkRow(cat, { name, url }, cat.links.length - 1);
+    group.insertBefore(row, addArea);
+  }
 }
 
-function removeLink(catLabel, idx) {
-  const cat = categories.find(c => c.label === catLabel);
+function removeLink(cat, idx) {
   if (!cat) return;
   cat.links.splice(idx, 1);
   saveCategories();
-  renderLinks();
+
+  const group = document.querySelector(`.link-group[data-label="${cat.label}"]`);
+  if (group) {
+    const rows = group.querySelectorAll('.link-row');
+    if (rows[idx]) rows[idx].remove();
+  }
 }
 
 function resetLinks() {
   if (!confirm('Reset all links to defaults?')) return;
   localStorage.removeItem(LS_KEY);
-  categories = JSON.parse(JSON.stringify(CONFIG.categories));
+  categories = cloneDefaults();
   renderLinks();
 }
 
@@ -261,6 +305,8 @@ renderLinks();
 // ────────────────────────────────────────
 const editToggle = document.getElementById('edit-toggle');
 let isEditing = false;
+
+if (!editToggle) throw new Error('Edit toggle button not found');
 
 editToggle.addEventListener('click', () => {
   isEditing = !isEditing;
