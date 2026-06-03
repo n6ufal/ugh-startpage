@@ -84,13 +84,6 @@ body {
   margin-top: 0.15rem;
 }
 
-.prompt {
-  font-size: 0.8rem;
-  color: var(--frost-2);
-  letter-spacing: 0.02em;
-  margin-bottom: 0.5rem;
-}
-
 .clock {
   font-size: clamp(4rem, 10vw, 6rem);
   font-weight: 200;
@@ -240,9 +233,6 @@ body {
   }
   .clock {
     font-size: clamp(2rem, 8vw, 2.5rem);
-  }
-  .prompt {
-    font-size: 0.7rem;
   }
   .links-grid {
     row-gap: 1.2rem;
