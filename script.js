@@ -91,11 +91,17 @@ function updateDatetime() {
   const dd  = String(now.getDate()).padStart(2, '0');
   const mo  = String(now.getMonth() + 1).padStart(2, '0');
   const yy  = String(now.getFullYear()).slice(2);
-  const el = document.getElementById('datetime');
-  if (el) {
-    el.textContent =
-      `${day}, ${hh}:${mm}:${ss} | ${dd}/${mo}/${yy}`;
+
+  const clockEl = document.getElementById('clock');
+  if (clockEl) {
+    clockEl.textContent = `${hh}:${mm}:${ss}`;
   }
+
+  const dateEl = document.getElementById('datetime');
+  if (dateEl) {
+    dateEl.textContent = `${day}, ${dd}/${mo}/${yy}`;
+  }
+
   document.title = `${hh}:${mm} | ${dd}/${mo}/${yy}`;
 }
 

@@ -69,31 +69,30 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
 }
 
 .welcome {
-  font-family: 'Lora', 'Georgia', 'Palatino Linotype', serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  color: var(--fg-2);
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin-bottom: 0.25rem;
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  color: var(--frost-2);
+  letter-spacing: 0.02em;
+  margin-top: 0.5rem;
 }
 
 .datetime {
-  font-size: 0.75rem;
-  color: var(--fg-muted);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: var(--dim);
   letter-spacing: 0.04em;
+  margin-top: 0.15rem;
 }
 
 .prompt {
   font-size: 0.8rem;
   color: var(--frost-2);
-  margin: 0.25rem 0 1rem;
   letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
 }
 
 .prompt::after {
@@ -108,9 +107,19 @@ body {
   50% { opacity: 0; }
 }
 
+.clock {
+  font-size: clamp(4rem, 10vw, 6rem);
+  font-weight: 200;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--fg-2);
+  margin: 0.25rem 0;
+}
+
 .links-grid {
   columns: 4;
   column-gap: 2.5rem;
+  margin-top: 1.5rem;
 }
 
 .link-group {
@@ -118,6 +127,7 @@ body {
   margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.4rem;
 }
 
@@ -129,14 +139,23 @@ body {
 }
 
 .link-item {
-  display: block;
+  display: inline-block;
   font-size: 0.85rem;
   color: var(--fg-0);
   text-decoration: none;
   letter-spacing: 0.02em;
   line-height: 1.7;
   transition: color 0.12s;
-  width: fit-content;
+}
+
+.link-item::before {
+  content: "→ ";
+  color: var(--frost-3);
+  transition: color 0.12s;
+}
+
+.link-item:hover::before {
+  color: var(--frost-2);
 }
 
 .link-item:hover {
@@ -204,23 +223,20 @@ body {
     align-items: center;
   }
   .links-grid {
-    justify-items: start;
-  }
-  .prompt {
-    align-self: flex-start;
+    margin-top: 1rem;
   }
 }
 
 @media (max-width: 550px) {
+  .clock {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+  }
   .links-grid {
     grid-template-columns: 1fr;
     row-gap: 1.5rem;
   }
   .link-group {
     gap: 0.5rem;
-  }
-  .welcome {
-    font-size: 1.6rem;
   }
   .group-label {
     font-size: 0.7rem;
@@ -239,8 +255,8 @@ body {
     width: 100px;
     height: 100px;
   }
-  .datetime {
-    font-size: 0.65rem;
+  .clock {
+    font-size: clamp(2rem, 8vw, 2.5rem);
   }
   .prompt {
     font-size: 0.7rem;
