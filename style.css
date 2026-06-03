@@ -56,7 +56,7 @@ body {
 
 .sidebar {
   position: absolute;
-  left: 0;
+  left: -2rem;
   top: 50%;
   transform: translateY(-50%);
   width: 160px;
@@ -77,16 +77,9 @@ body {
   gap: 0.25rem;
 }
 
-.welcome {
-  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
-  color: var(--frost-2);
-  letter-spacing: 0.02em;
-  margin-top: 0.5rem;
-}
-
 .datetime {
   font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: var(--dim);
+  color: var(--fg-0);
   letter-spacing: 0.04em;
   margin-top: 0.15rem;
 }
@@ -96,18 +89,6 @@ body {
   color: var(--frost-2);
   letter-spacing: 0.02em;
   margin-bottom: 0.5rem;
-}
-
-.prompt::after {
-  content: "▌";
-  animation: blink 1s step-end infinite;
-  margin-left: 4px;
-  color: var(--frost-2);
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
 }
 
 .clock {
@@ -177,9 +158,6 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .layout {
-    animation: none;
-  }
-  .prompt::after {
     animation: none;
   }
 }
@@ -271,62 +249,3 @@ body {
   }
 }
 
-dialog {
-  background: var(--bg-1);
-  color: var(--fg-0);
-  border: 1px solid var(--frost-3);
-  border-radius: 8px;
-  padding: 1.5rem;
-  font-family: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
-  max-width: 340px;
-}
-
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-dialog p {
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-dialog label {
-  display: block;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
-  color: var(--fg-muted);
-}
-
-dialog input {
-  display: block;
-  width: 100%;
-  margin-top: 0.4rem;
-  background: var(--bg-2);
-  color: var(--fg-0);
-  border: 1px solid var(--dim);
-  padding: 0.4rem 0.6rem;
-  font-family: inherit;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  outline: none;
-}
-
-dialog input:focus {
-  border-color: var(--frost-2);
-}
-
-dialog button {
-  background: var(--frost-3);
-  color: var(--fg-2);
-  border: none;
-  padding: 0.4rem 0.8rem;
-  font-family: inherit;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.12s;
-}
-
-dialog button:hover {
-  background: var(--frost-2);
-}
